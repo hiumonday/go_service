@@ -27,6 +27,13 @@ func SetupRouter(router *gin.Engine, db *gorm.DB, producer *kafka.Producer, redi
 	//v1 api
 	v1 := router.Group("/api/v1")
 
+	publicRoutes := v1.Group("/public")
+	{
+		publicRoutes.GET("/ping", func(c *gin.Context) {
+			c.JSON(200, gin.H{"status": "pong"})
+		})
+	}
+
 	protectedRoutes := v1.Group("/")
 	protectedRoutes.Use(middleware.AuthMiddleware(db))
 
