@@ -175,7 +175,7 @@ func (s *UserService) CreateUser(ctx context.Context, username, email, password,
 	// Execute request
 	var response struct {
 		CreateUser struct {
-			Code    int         `json:"code"`
+			Code    string      `json:"code"`
 			Success bool        `json:"success"`
 			Message string      `json:"message"`
 			User    models.User `json:"user"`
