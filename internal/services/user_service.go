@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go_service/internal/models"
 	"log"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -27,7 +28,7 @@ type UserService struct {
 
 // NewUserService creates a new user service client
 func NewUserService() *UserService {
-	baseURL := "http://localhost:4000/users"
+	baseURL := os.Getenv("USER_SERVICE_URL")
 
 	log.Printf("Initializing UserService with URL: %s", baseURL)
 	client := graphql.NewClient(baseURL)
