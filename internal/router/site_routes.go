@@ -38,6 +38,7 @@ func SetupRouter(router *gin.Engine, db *gorm.DB, producer *kafka.Producer, redi
 	protectedRoutes.Use(middleware.AuthMiddleware(db))
 
 	// Set up all routes
+	AssetRoutes(protectedRoutes, db)
 	TeamRoutes(protectedRoutes, teamHandler)
 	ImportRoutes(protectedRoutes, importHandler)
 }

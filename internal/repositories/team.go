@@ -14,8 +14,10 @@ type ITeamRepository interface {
 	CreateTeam(ctx context.Context, team *models.Team) error
 	AddMemberToTeam(ctx context.Context, roster models.Roster) error
 	IsUserInTeam(ctx context.Context, teamID uuid.UUID, userID uuid.UUID) (bool, error)
+	IsManager(ctx context.Context, teamID, userID uuid.UUID) (bool, error)
 	GetTeamMembers(ctx context.Context, teamID uuid.UUID) ([]models.Roster, error)
 	RemoveMemberFromTeam(ctx context.Context, teamID uuid.UUID, userID uuid.UUID) error
+	GetUserTeamID(ctx context.Context, userID uuid.UUID) (uuid.UUID, error)
 }
 
 type TeamRepository struct {
@@ -81,4 +83,25 @@ func (r *TeamRepository) RemoveMemberFromTeam(ctx context.Context, teamID uuid.U
 	return r.db.WithContext(ctx).
 		Where("team_id = ? AND user_id = ?", teamID, userID).
 		Delete(&models.Roster{}).Error
+}
+
+func (r *TeamRepository) IsManager(ctx context.Context, teamID, userID uuid.UUID) (bool, error) {
+	var count int64
+	err := r.db.WithContext(ctx).
+		Model(&models.Roster{}).
+		Where("team_id = ? AND user_id = ? AND role = ?", teamID, userID, "manager").
+		Count(&count).Error
+	return count > 0, err
+}
+
+func (r *TeamRepository) GetUserTeamID(ctx context.Context, userID uuid.UUID) (uuid.UUID, error) {
+	var roster models.Roster
+	err := r.db.WithContext(ctx).
+		Select("team_id").
+		Where("user_id = ?", userID).
+		First(&roster).Error
+	if err != nil {
+		return uuid.Nil, err
+	}
+	return roster.TeamID, nil
 }
