@@ -9,6 +9,7 @@ import (
 	"go_service/internal/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -42,7 +43,7 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if userResponse == nil || userResponse.ID == "" {
+		if userResponse == nil || userResponse.ID == uuid.Nil {
 			log.Printf("User data is empty for ID: %s", claims.UserID.String())
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
 			c.Abort()

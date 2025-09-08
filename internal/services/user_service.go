@@ -74,7 +74,7 @@ func (s *UserService) GetUserByID(ctx context.Context, userID uuid.UUID) (*model
 	}
 
 	// Check if user was found
-	if response.User == nil && response.User.ID == "" {
+	if response.User == nil && response.User.ID == uuid.Nil {
 		log.Printf("User not found with ID: %s %s", userIDStr, response)
 		return nil, fmt.Errorf("user not found with ID: %s", userIDStr)
 	}

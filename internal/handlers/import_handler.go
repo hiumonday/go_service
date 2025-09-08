@@ -14,6 +14,7 @@ import (
 	"go_service/internal/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type ImportHandler struct {
@@ -28,10 +29,11 @@ func NewImportHandler() *ImportHandler {
 
 // Result represents the result of a user import operation
 type ImportResult struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Success  bool   `json:"success"`
-	Error    string `json:"error,omitempty"`
+	UserId   uuid.UUID `json:"userId,omitempty"`
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
+	Success  bool      `json:"success"`
+	Error    string    `json:"error,omitempty"`
 }
 
 // ImportUsers handles the POST /import-users endpoint
@@ -193,7 +195,7 @@ func (h *ImportHandler) worker(ctx context.Context, jobs <-chan []string, result
 		}
 
 		// Call user service to create user
-		_, err := h.userService.CreateUser(ctx, username, email, password, role)
+		user, err := h.userService.CreateUser(ctx, username, email, password, role)
 		if err != nil {
 			results <- ImportResult{
 				Username: username,
@@ -205,6 +207,7 @@ func (h *ImportHandler) worker(ctx context.Context, jobs <-chan []string, result
 		}
 
 		results <- ImportResult{
+			UserId:   user.ID,
 			Username: username,
 			Email:    email,
 			Success:  true,
