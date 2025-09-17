@@ -5,8 +5,33 @@ services:
     build: .
     ports:
       - "8080:8080"
-    env_file:
-      - .env
+    environment:
+      # Database configuration
+    # DB_HOST=host.docker.internal
+      - DB_HOST=ep-solitary-haze-a1nwtzso-pooler.ap-southeast-1.aws.neon.tech
+      - DB_PORT=5432
+      - DB_USER=neondb_owner
+      - DB_PASS=npg_afMioT1F7YIE
+      - DB_NAME=neondb
+      - DATABASE_URL=postgresql://postgres:hieunt04lm@db.rakswdmeiapnarrdohza.supabase.co:5432/postgres
+
+      # JWT configuration
+      - ACCESS_TOKEN_SECRET=IDontKnowHowButTheyFoundMe
+      - REFRESH_TOKEN_SECRET=ArcticMonkeys
+
+      #User_service url
+      # USER_SERVICE_URL=https://user-service-8iwy.onrender.com/users
+      - USER_SERVICE_URL=http://localhost:4000/users
+
+      # Server configuration
+      - PORT=8080
+
+      - BOOTSTRAP_HOST=pkc-619z3.us-east1.gcp.confluent.cloud:9092
+      - KAFKA_USERNAME=CM4OQWTDJLRKDSON
+      - KAFKA_PASSWORD=cfltf3jK6fqWRO37G7VBIY+OQg4w51+plkHV8ATlMRAhoPb4eVK6OPBbI6MgX5aQ
+
+      - REDIS_ADDRESS=redis-10166.c323.us-east-1-2.ec2.redns.redis-cloud.com:10166
+      - REDIS_PASSWORD=YUDWWMPA7YUdWUxskx7qnlvF3eNmqb0g
     restart: unless-stopped
     volumes:
       - ./logs:/app/logs
