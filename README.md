@@ -13,7 +13,7 @@ A robust REST API service built with Go, Gin framework, PostgreSQL, Redis, and K
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/hiumonday/go_service.git
 cd seta-go_service/go_service
 
 # Start all services
